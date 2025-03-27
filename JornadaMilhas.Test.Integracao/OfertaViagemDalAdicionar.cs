@@ -6,7 +6,8 @@ using Xunit.Abstractions;
 
 namespace JornadaMilhas.Test.Integracao;
 
-public class OfertaViagemDalAdicionar : IClassFixture<ContextoFixture>
+[Collection(nameof(ContextoCollection))]
+public class OfertaViagemDalAdicionar
 {    
     private readonly JornadaMilhasContext _context;
 
