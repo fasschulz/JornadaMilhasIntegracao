@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JornadaMilhas.Test.Integracao;
+namespace JornadaMilhas.Test.Integracao.DataBuilders;
 
 public class PeriodoDataBuilder : Faker<Periodo>
 {

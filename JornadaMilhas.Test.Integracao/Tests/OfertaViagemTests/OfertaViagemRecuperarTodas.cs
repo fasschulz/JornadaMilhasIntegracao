@@ -1,5 +1,7 @@
 ﻿using JornadaMilhas.Dados;
+using JornadaMilhas.Test.Integracao.Fixture;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,26 +9,26 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
 
-namespace JornadaMilhas.Test.Integracao;
+namespace JornadaMilhas.Test.Integracao.Tests.OfertaViagemTests;
 
 [Collection(nameof(ContextoCollection))]
-public class OfertaViagemDalRecuperarPorId
+public class OfertaViagemRecuperarTodas
 {
     private JornadaMilhasContext _context;
 
-    public OfertaViagemDalRecuperarPorId(ITestOutputHelper output, ContextoFixture fixture)
+    public OfertaViagemRecuperarTodas(ITestOutputHelper output, ContextoFixture fixture)
     {
         _context = fixture.Context;
         output.WriteLine(_context.GetHashCode().ToString());
     }
 
     [Fact]
-    public void RetornaNuloQuandoIdInexistente()
+    public void RecuperaTodasAsOfertasCadastradas()
     {
         var dal = new OfertaViagemDAL(_context);
+        var ofertas = dal.RecuperarTodas();
 
-        var ofertaRecuperada = dal.RecuperarPorId(-2);
-
-        Assert.Null(ofertaRecuperada);
+        Assert.NotNull(ofertas);
+        Assert.True(ofertas.Count() > 0);
     }
 }

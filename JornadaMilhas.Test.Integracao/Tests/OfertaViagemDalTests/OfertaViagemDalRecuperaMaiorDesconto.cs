@@ -1,5 +1,7 @@
 ﻿using Bogus;
 using JornadaMilhas.Dados;
+using JornadaMilhas.Test.Integracao.DataBuilders;
+using JornadaMilhas.Test.Integracao.Fixture;
 using JornadaMilhasV1.Gerenciador;
 using JornadaMilhasV1.Modelos;
 using System;
@@ -8,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JornadaMilhas.Test.Integracao;
+namespace JornadaMilhas.Test.Integracao.Tests.OfertaViagemDalTests;
 
 [Collection(nameof(ContextoCollection))]
 public class OfertaViagemDalRecuperaMaiorDesconto

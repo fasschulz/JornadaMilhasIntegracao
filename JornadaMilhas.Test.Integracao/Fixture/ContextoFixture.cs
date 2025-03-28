@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using DotNet.Testcontainers.Builders;
 using JornadaMilhas.Dados;
+using JornadaMilhas.Test.Integracao.DataBuilders;
 using JornadaMilhasV1.Modelos;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Testcontainers.MsSql;
 
-namespace JornadaMilhas.Test.Integracao;
+namespace JornadaMilhas.Test.Integracao.Fixture;
 
 public class ContextoFixture : IAsyncLifetime
 {
@@ -38,14 +39,14 @@ public class ContextoFixture : IAsyncLifetime
 
     public void CriarDadosFake()
     {
-        Periodo periodo = new PeriodoFaker().Build();
+        Periodo periodo = new PeriodoDataBuilder().Build();
 
         var rota = new Rota("Curitiba", "São Paulo");
 
         var fakerOferta = new Faker<OfertaViagem>()
             .CustomInstantiator(f => new OfertaViagem(
                 rota,
-                new PeriodoFaker().Build(),
+                new PeriodoDataBuilder().Build(),
                 100 * f.Random.Int(1, 100))
             )
             .RuleFor(o => o.Desconto, f => 40)

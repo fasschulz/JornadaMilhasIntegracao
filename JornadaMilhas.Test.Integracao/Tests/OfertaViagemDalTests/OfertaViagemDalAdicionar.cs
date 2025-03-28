@@ -1,10 +1,11 @@
 using JornadaMilhas.Dados;
+using JornadaMilhas.Test.Integracao.Fixture;
 using JornadaMilhasV1.Modelos;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Xunit.Abstractions;
 
-namespace JornadaMilhas.Test.Integracao;
+namespace JornadaMilhas.Test.Integracao.Tests.OfertaViagemDalTests;
 
 [Collection(nameof(ContextoCollection))]
 public class OfertaViagemDalAdicionar
