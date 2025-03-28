@@ -14,7 +14,7 @@ public class PeriodoDataBuilder : Faker<Periodo>
     public DateTime? DataFinal { get; set; }
 
     public PeriodoDataBuilder()
-    {
+    {        
         CustomInstantiator(f =>
             {
                 DateTime dataInicio = DataInicial ?? f.Date.Soon();
