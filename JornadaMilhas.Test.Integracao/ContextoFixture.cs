@@ -1,5 +1,7 @@
-﻿using DotNet.Testcontainers.Builders;
+﻿using Bogus;
+using DotNet.Testcontainers.Builders;
 using JornadaMilhas.Dados;
+using JornadaMilhasV1.Modelos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,5 +34,26 @@ public class ContextoFixture : IAsyncLifetime
     public async Task DisposeAsync()
     {
         await _msSqlContainer.StopAsync();
+    }
+
+    public void CriarDadosFake()
+    {
+        Periodo periodo = new PeriodoFaker().Build();
+
+        var rota = new Rota("Curitiba", "São Paulo");
+
+        var fakerOferta = new Faker<OfertaViagem>()
+            .CustomInstantiator(f => new OfertaViagem(
+                rota,
+                new PeriodoFaker().Build(),
+                100 * f.Random.Int(1, 100))
+            )
+            .RuleFor(o => o.Desconto, f => 40)
+            .RuleFor(o => o.Ativa, f => true);                
+                
+        var lista = fakerOferta.Generate(200);
+        
+        Context.OfertasViagem.AddRange(lista);
+        Context.SaveChanges();
     }
 }
