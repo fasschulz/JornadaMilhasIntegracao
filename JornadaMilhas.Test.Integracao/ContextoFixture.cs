@@ -1,24 +1,36 @@
-﻿using JornadaMilhas.Dados;
+﻿using DotNet.Testcontainers.Builders;
+using JornadaMilhas.Dados;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Testcontainers.MsSql;
 
 namespace JornadaMilhas.Test.Integracao;
 
-public class ContextoFixture
+public class ContextoFixture : IAsyncLifetime
 {
-    private DbContextOptions<JornadaMilhasContext> _options;
-    public JornadaMilhasContext Context;
+    public JornadaMilhasContext Context { get; private set; }
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder()
+        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+        .Build();
 
-    public ContextoFixture()
+    public async Task InitializeAsync()
     {
-        _options = new DbContextOptionsBuilder<JornadaMilhasContext>()
-            .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JornadaMilhas;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
+        await _msSqlContainer.StartAsync();
+        var options = new DbContextOptionsBuilder<JornadaMilhasContext>()
+            .UseSqlServer(_msSqlContainer.GetConnectionString())
             .Options;
 
-        Context = new JornadaMilhasContext(_options);
+        Context = new JornadaMilhasContext(options);
+        Context.Database.Migrate();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await _msSqlContainer.StopAsync();
     }
 }
