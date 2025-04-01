@@ -12,14 +12,22 @@ using Xunit.Abstractions;
 namespace JornadaMilhas.Test.Integracao.Tests.OfertaViagemTests;
 
 [Collection(nameof(ContextoCollection))]
-public class OfertaViagemRecuperarTodas
+public class OfertaViagemRecuperarTodas : IDisposable
 {
     private JornadaMilhasContext _context;
+    private ContextoFixture _fixture;
 
     public OfertaViagemRecuperarTodas(ITestOutputHelper output, ContextoFixture fixture)
     {
         _context = fixture.Context;
+        _fixture = fixture;
+        _fixture.CriarDadosFake();
         output.WriteLine(_context.GetHashCode().ToString());
+    }
+
+    public void Dispose()
+    {
+        _fixture.LimparDadosDoBanco();
     }
 
     [Fact]
